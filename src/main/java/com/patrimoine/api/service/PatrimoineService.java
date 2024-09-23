@@ -12,8 +12,11 @@ import java.time.LocalDateTime;
 @Service
 public class PatrimoineService {
     private static final String DATA_DIRECTORY = "data/patrimoines/";
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
+    public PatrimoineService(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
     public Patrimoine getPatrimoine(String id) throws IOException {
         Path filePath = Path.of(DATA_DIRECTORY + id + ".json");
         if (Files.exists(filePath)) {
@@ -25,6 +28,7 @@ public class PatrimoineService {
     }
 
     public Patrimoine saveOrUpdatePatrimoine(String id, Patrimoine patrimoine) throws IOException {
+        patrimoine.setId(id);
         patrimoine.setLastUpdate(LocalDateTime.now());
         String json = objectMapper.writeValueAsString(patrimoine);
 
